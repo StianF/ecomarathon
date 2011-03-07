@@ -92,13 +92,15 @@ if($cp[visited] == 0 && $started[time_status] == 1){
 			echo "$('#lap".$id[id]."').text(\"".floor($time/60).":".str_pad($time%60, 2, "0", STR_PAD_LEFT)."\");";
 			$diff = $time -$id[planned_time] ;
 			echo "$('#lapdiff".$id[id]."').text(\"".(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
-			$avgspeed = ($cp[distance]/$time)*3.6;
-			echo "$('#avgspeed').text(\"".round($avgspeed,1)." km/h\");";
+			$avgspeed = (3173/$time)*3.6;
+			echo "$('#avglap".$id[id]."').text(\"".round($avgspeed,1)." km/h\");";
 			$totaltime = mysql_fetch_assoc(mysql_query("SELECT SUM(time) as sum FROM laps"));
 			echo "$('#totaltime').text(\"".floor($totaltime[sum]/60).":".str_pad($totaltime[sum]%60, 2, "0", STR_PAD_LEFT)."\");";
 			$diff = mysql_fetch_assoc(mysql_query("SELECT SUM(planned_time) as sum FROM laps"));
 			$diff = $totaltime[sum]-$diff[sum];
 			echo "$('#totaldiff').text(\"".(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
+			$avgspeed = ($cp[distance]/$totaltime[sum])*3.6;
+			echo "$('#avgspeed').text(\"".round($avgspeed,1)." km/h\");";
 		}
 	}
 	}

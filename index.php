@@ -156,7 +156,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			<div id="content">
 				<div style="float:left;margin-top:5px;">
 					<table border="1" width="500px">
-						<tr><th>Lap #</th><th>Actual Time</th><th>Planned time</th><th>Diff</th></tr>
+						<tr><th>Lap #</th><th>Actual Time</th><th>Planned time</th><th>Diff</th><th>Avg speed</th></tr>
 						<?PHP $times = mysql_query("SELECT * FROM laps");
 							$totalplanned = 0;
 							$totaltime = 0;
@@ -169,6 +169,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 							echo "<td>".floor($lap[planned_time]/60).":".str_pad($lap[planned_time]%60, 2, "0", STR_PAD_LEFT)."</td>";
 							$diff = $lap[time]-$lap[planned_time];
 							echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
+							echo "<td id=\"avglap".$lap[id]."\">".(($lap[time] != 0)?round((3173/$lap[time])*3.6, 2)." km/h":"")."</td>";
 							echo "</tr>";
 						}
 						?>
@@ -177,10 +178,15 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 						<td><?PHP echo floor($totalplanned/60).":".str_pad($totalplanned%60, 2, "0", STR_PAD_LEFT);?></td>
 						<?PHP $diff = $totaltime-$totalplanned;?>
 						<td id="totaldiff"><?PHP echo (($diff != 0)?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"");?> </td>
+						<td id="avgspeed">
+						<?PHP 
+							if($totaltime != 0){
+								$totaldistance = mysql_fetch_assoc(mysql_query("SELECT max(distance) as max FROM realcps WHERE visited = 1"));
+								echo round(($totaldistance[max]/$totaltime)*3.6, 2)." km/h";
+							}
+						?>
+						</td>
 					</tr>
-					</table>
-					<table>
-						<tr><td>Avg speed</td><td id="avgspeed"></td></tr>
 					</table>
 				</div>
 				<div style="float:right;">			
@@ -306,6 +312,14 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					stopwatch(value);		
 				}else if(value == 'Reset'){
 					$.ajax({url: "http://81.167.78.33/eco/config.php?action=reset_clock"});
+					for(i = 1; i <= 6; i++){
+						$("#lap"+i).text('');
+						$("#lapdiff"+i).text('');
+						$("#avglap"+i).text('');
+					}
+					$("#avgspeed").text('');
+					$("#totaldiff").text('');
+					$("#totaltime").text('');
 					resetIt();
 				}
 			}
