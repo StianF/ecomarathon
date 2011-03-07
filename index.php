@@ -161,10 +161,10 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 						while($lap = mysql_fetch_assoc($times)){
 							echo "<tr>";
 							echo "<td>".$lap[id]."</td>";
-							echo "<td id=\"lap".$lap[id]."\">".floor($lap[time]/60).":".str_pad($lap[time]%60, 2, "0", STR_PAD_LEFT)."</td>";
+							echo "<td id=\"lap".$lap[id]."\">".(($lap[time] != "")?floor($lap[time]/60).":".str_pad($lap[time]%60, 2, "0", STR_PAD_LEFT):"")."</td>";
 							echo "<td>".floor($lap[planned_time]/60).":".str_pad($lap[planned_time]%60, 2, "0", STR_PAD_LEFT)."</td>";
 							$diff = $lap[time]-$lap[planned_time];
-							echo "<td id=\"lapdiff".$lap[id]."\">".floor($diff/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."</td>";
+							echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?floor($diff/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
 							echo "</tr>";
 						}
 						?>
