@@ -12,7 +12,11 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		  
 		<!--<link rel="stylesheet" type="text/css" href="jquery.jqplot.css" /> -->
 		<link rel="stylesheet" type="text/css" href="style.css" />	
-		
+		<link rel="stylesheet" type="text/css" href="popup.css" />	
+
+		<script language="javascript" type="text/javascript" src="common.js"></script> 
+		<script language="javascript" type="text/javascript" src="popup.js"></script>
+
 		<!-- BEGIN: load jquery --> 
 			<script language="javascript" type="text/javascript" src="jquery-1.4.2.min.js"></script> 
 		<!-- END: load jquery --> 
@@ -30,6 +34,22 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		<!-- BEGIN: highcharts -->
 			<script language="javascript" type="text/javascript" src="highcharts.js"></script>
 		<!-- END: highcharts -->
+	<script language="javascript" type="text/javascript">
+		function toggleLayer( whichLayer ) {
+		  var elem, vis;
+			  if( document.getElementById ) 
+				    elem = document.getElementById( whichLayer );
+						  else if( document.all ) 
+							      elem = document.all[whichLayer];
+										  else if( document.layers )
+											    elem = document.layers[whichLayer];
+													  vis = elem.style;
+														  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+															    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+																	  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+																		}
+
+																	</script>
 
 		<!--Google maps-->    		
 		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAYaog4dzwxoybW9_peuyRMBTmxJAMRai9ImD_LhpYkYI0uOtUXhRElJmT8ZyykJlgkzQYdkGDSVAUgg" type="text/javascript"></script>
@@ -98,7 +118,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					}
 					echo "</tr><tr>";
 					for($i = 0; $i < 46; $i++){
-						echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=0&n=".$i."');\" style=\"cursor: pointer\" id=\"cell".$i."\"></td>";
+						#echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=0&n=".$i."');\" style=\"cursor: pointer\" id=\"cell".$i."\"></td>";
+						echo "<td><a class='submodal-800-520' href=\"http://81.167.78.33/eco/stat.php?type=0&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"cell".$i."\"></a></td>";
 					}
 				?>
 					</tr>
