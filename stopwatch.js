@@ -1,6 +1,3 @@
-var sec = 0;
-var min = 0;
-var hour = 0;
 function stopwatch(text) {
    sec++;
   if (sec == 60) {

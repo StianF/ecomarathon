@@ -158,16 +158,26 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					<table border="1" width="500px">
 						<tr><th>Lap #</th><th>Actual Time</th><th>Planned time</th><th>Diff</th></tr>
 						<?PHP $times = mysql_query("SELECT * FROM laps");
+							$totalplanned = 0;
+							$totaltime = 0;
 						while($lap = mysql_fetch_assoc($times)){
+							$totalplanned += $lap[planned_time];
+							$totaltime += $lap[time];
 							echo "<tr>";
 							echo "<td>".$lap[id]."</td>";
 							echo "<td id=\"lap".$lap[id]."\">".(($lap[time] != "")?floor($lap[time]/60).":".str_pad($lap[time]%60, 2, "0", STR_PAD_LEFT):"")."</td>";
 							echo "<td>".floor($lap[planned_time]/60).":".str_pad($lap[planned_time]%60, 2, "0", STR_PAD_LEFT)."</td>";
 							$diff = $lap[time]-$lap[planned_time];
-							echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?floor($diff/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
+							echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
 							echo "</tr>";
 						}
 						?>
+					<tr><td>Total</td>
+						<td id="totaltime"><?PHP echo floor($totaltime/60).":".str_pad($totaltime%60, 2, "0", STR_PAD_LEFT);?></td>
+						<td><?PHP echo floor($totalplanned/60).":".str_pad($totalplanned%60, 2, "0", STR_PAD_LEFT);?></td>
+						<?PHP $diff = $totaltime-$totalplanned;?>
+						<td id="totaldiff"><?PHP echo (($diff != 0)?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"");?> </td>
+					</tr>
 					</table>
 					<table>
 						<tr><td>Avg speed</td><td id="avgspeed"></td></tr>
@@ -191,7 +201,23 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			var pos;
 			var visibleChart = 0;
 			var visibleCount = 0;
-
+			<?PHP 
+			if ($_SESSION[config][time] != "0000-00-00 00:00:00"){
+				$time = strtotime("now")-strtotime($_SESSION[config][time]);
+				echo "var sec = ".($time%60).";";
+				echo "var min = ".floor($time/60).";";
+				echo "var hour = ".floor($time/3600).";";
+				if($_SESSION[config][time_status] == 1){
+					echo "stopwatch(\"Start\");";
+				}
+			}else{	
+			?>
+				var sec = 0;
+				var min = 0;
+				var hour = 0;
+			<?PHP
+			}
+			?>
 			function showhide(div) {
 
 				if($("#"+div).css("display") == "none"){

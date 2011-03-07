@@ -66,6 +66,11 @@ function save_to_db($t,$n,$v){
 $out = substr($out,0,strlen($out)-1)."];";
 echo $out;
 $cp = mysql_fetch_assoc(mysql_query("SELECT r.id as rid, r.*, c.* FROM realcps r JOIN cps c ON c.id = r.cp_id WHERE visited = 0 ORDER BY r.id ASC LIMIT 1"));
+$last_cp = mysql_query("SELECT * FROM realcps r JOIN cps c ON c.id = r.cp_id WHERE r.visited = 1 AND r.id < ".$cp[rid]." AND c.finish = 1 ORDER BY r.id DESC LIMIT 1");
+if($last_cp){
+	$last_cp = mysql_fetch_assoc($last_cp);
+}
+
 $lat = $gpsarray[$_SESSION[gpsi]][0];
 $long = $gpsarray[$_SESSION[gpsi]][1];
 
@@ -82,13 +87,18 @@ if($cp[visited] == 0 && $started[time_status] == 1){
 		mysql_query("UPDATE realcps SET visited = 1, visited_at = CURRENT_TIMESTAMP WHERE id = ".$cp[rid]);
 		if($cp[finish] == 1){
 			$id = mysql_fetch_assoc(mysql_query("SELECT min(id) as id, laps.* FROM laps WHERE time IS NULL"));
-			$time = (strtotime("now")-strtotime($started[time]));
+			$time = strtotime("now")-((!$last_cp)?strtotime($started[time]):strtotime($last_cp[visited_at]));
 			mysql_query("UPDATE laps SET time = ".$time." WHERE id = ".$id[id]);
-			echo "$('#lap".$id[id]."').text(\"".floor($time/60).":".str_pad($time%60, "0", 2, STR_PAD_LEFT)."\");";
+			echo "$('#lap".$id[id]."').text(\"".floor($time/60).":".str_pad($time%60, 2, "0", STR_PAD_LEFT)."\");";
 			$diff = $time -$id[planned_time] ;
-			echo "$('#lapdiff".$id[id]."').text(\"".floor($diff/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
+			echo "$('#lapdiff".$id[id]."').text(\"".(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
 			$avgspeed = ($cp[distance]/$time)*3.6;
 			echo "$('#avgspeed').text(\"".round($avgspeed,1)." km/h\");";
+			$totaltime = mysql_fetch_assoc(mysql_query("SELECT SUM(time) as sum FROM laps"));
+			echo "$('#totaltime').text(\"".floor($totaltime[sum]/60).":".str_pad($totaltime[sum]%60, 2, "0", STR_PAD_LEFT)."\");";
+			$diff = mysql_fetch_assoc(mysql_query("SELECT SUM(planned_time) as sum FROM laps"));
+			$diff = $totaltime[sum]-$diff[sum];
+			echo "$('#totaldiff').text(\"".(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
 		}
 	}
 	}
