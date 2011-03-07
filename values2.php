@@ -85,7 +85,7 @@ if($cp[visited] == 0 && $started[time_status] == 1){
 			$time = (strtotime("now")-strtotime($started[time]));
 			mysql_query("UPDATE laps SET time = ".$time." WHERE id = ".$id[id]);
 			echo "$('#lap".$id[id]."').text(\"".floor($time/60).":".str_pad($time%60, "0", 2, STR_PAD_LEFT)."\");";
-			$diff = $id[planned_time] - $time;
+			$diff = $time -$id[planned_time] ;
 			echo "$('#lapdiff".$id[id]."').text(\"".floor($diff/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT)."\");";
 			$avgspeed = ($cp[distance]/$time)*3.6;
 			echo "$('#avgspeed').text(\"".round($avgspeed,1)." km/h\");";
