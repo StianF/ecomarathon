@@ -37,19 +37,19 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 	<script language="javascript" type="text/javascript">
 		function toggleLayer( whichLayer ) {
 		  var elem, vis;
-			  if( document.getElementById ) 
-				    elem = document.getElementById( whichLayer );
-						  else if( document.all ) 
-							      elem = document.all[whichLayer];
-										  else if( document.layers )
-											    elem = document.layers[whichLayer];
-													  vis = elem.style;
-														  if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
-															    vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
-																	  vis.display = (vis.display==''||vis.display=='block')?'none':'block';
-																		}
+			if( document.getElementById ) 
+				elem = document.getElementById( whichLayer );
+			else if( document.all ) 
+				elem = document.all[whichLayer];
+			else if( document.layers )
+				elem = document.layers[whichLayer];
+				vis = elem.style;
+			if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+				vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
+				vis.display = (vis.display==''||vis.display=='block')?'none':'block';
+			}
 
-																	</script>
+		</script>
 
 		<!--Google maps-->    		
 		<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAYaog4dzwxoybW9_peuyRMBTmxJAMRai9ImD_LhpYkYI0uOtUXhRElJmT8ZyykJlgkzQYdkGDSVAUgg" type="text/javascript"></script>
@@ -141,7 +141,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					</tr>
 				</table>
 			</div>
-			<input type="button" onClick="showhide('outputv');" id="outputbut" value="Output Voltage">
+			<input type="button" onClick="showhide('outputv');" id="outputvbut" value="Output Voltage">
 			<div style="display:none;" id="outputv">
 				<table>
 					<tr>
@@ -252,6 +252,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				}else{
 					$("#"+div).css("display", "none");
 				}
+				$("#"+div+"but").css("background-color", "");
 			}
 			//<!--Get values-->
 			$(function () {
@@ -267,14 +268,14 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					if(cell_voltage[i] == 0.0 || cell_voltage[i] > 1.8){
 						$("#cell"+i).css("color", "red");
 						found = true;
+					}else if($("#cell"+i).css("color") == "red" || $("#cell"+i).css("color") == "rgb(255, 128, 64)"){
+						$("#cell"+i).css("color", "#FF8040");
 					}else{
 						$("#cell"+i).css("color", "green");
 					}
 				}
 				if(found){
 					$("#cellbut").css("background-color", "red");
-				}else{
-					$("#cellbut").css("background-color", "");
 				}
 				found = false;
 				for(i = 0; i < 12; i++){
@@ -282,14 +283,14 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					if(temperature[i] == 0.0 || temperature[i] > 40){
 						$("#tempsens"+i).css("color", "red");
 						found = true;
+					}else if($("#tempsens"+i).css("color") == "red" || $("#tempsens"+i).css("color") == "rgb(255, 128, 64)"){
+						$("#tempsens"+i).css("color", "#FF8040");
 					}else{
 						$("#tempsens"+i).css("color", "green");
 					}
 				}
 				if(found){
 					$("#temperaturebut").css("background-color", "red");
-				}else{
-					$("#temperaturebut").css("background-color", "");
 				}
 				found = false;
 				for(i = 0; i < 5; i++){
@@ -297,29 +298,29 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					if(fuelcell_out[i] == 0.0 || fuelcell_out[i] > 18){
 						$("#outputvo"+i).css("color", "red");
 						found = true;
+					}else if($("#outputvo"+i).css("color") == "red" || $("#outputvo"+i).css("color") == "rgb(255, 128, 64)"){
+						$("#outputvo"+i).css("color", "#FF8040");
 					}else{
 						$("#outputvo"+i).css("color", "green");
 					}
 				}
 				if(found){
-					$("#outputbut").css("background-color", "red");
-				}else{
-					$("#outputbut").css("background-color", "");
+					$("#outputivbut").css("background-color", "red");
 				}
 				found = false;
 				for(i = 0; i < 3; i++){
 					$("#pressures"+i).text(pressure[i]+" Pa");
-					if(pressure[i] == 0.0 || pressure[i] > 18){
+					if(pressure[i] == 0.0 || pressure[i] > 18 || pressure[i] == "err"){
 						$("#pressures"+i).css("color", "red");
 						found = true;
+					}else if($("#pressures"+i).css("color") == "red" || $("#pressures"+i).css("color") == "rgb(255, 128, 64)"){
+						$("#pressures"+i).css("color", "#FF8040");
 					}else{
 						$("#pressures"+i).css("color", "green");
 					}
 				}
 				if(found){
 					$("#pressurebut").css("background-color", "red");
-				}else{
-					$("#pressurebut").css("background-color", "");
 				}
 				setCarPos(pos[index][0], pos[index][1]);
 				setTimeout(updateValues, 2000);
