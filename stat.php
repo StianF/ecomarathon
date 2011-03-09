@@ -2,15 +2,27 @@
 include "db.php";
 $type = $_GET['type'];
 $n = $_GET['n'];
+$offset = $_GET['offset'];
+if(isset($offset)){
+	$offset = ($offset*50).",";
+}else{
+	$offset = "";
+}
 if(!isset($n) || !isset($type))
 	return;
 $info = mysql_query("SELECT * FROM type WHERE id = ".$type);
 $info = mysql_fetch_assoc($info);
-$hist = mysql_query("SELECT * FROM log WHERE type = ".$type." AND n = ".$n." ORDER BY time DESC LIMIT 50");
+$hist = mysql_query("SELECT * FROM log WHERE type = ".$type." AND n = ".$n." ORDER BY time DESC LIMIT ".$offset."50");
 
-$a = mysql_fetch_assoc($hist);
-$series = "[['".$a[time]."',".$a[value]."]";
+$hista = Array();
 while($a = mysql_fetch_assoc($hist)){
+	array_push($hista, $a);	
+}
+$hista = array_reverse($hista);
+$a = $hista[0];
+$series = "[['".$a[time]."',".$a[value]."]";
+for($i = 1; $i < count($hista); $i++){
+	$a = $hista[$i];
 	$series .= ",['".$a[time]."',".$a[value]."]";
 }
 $series .= "]";
@@ -62,7 +74,17 @@ mysql_close($conn);
 
 	</head>
 	<body>
-		<div id="chart1">
+		<div id="chart1"></div>
+		<div>
+		<div style="float:left"><a href="stat.php?type=<?PHP echo $type;?>&n=<?PHP echo $n;?><?PHP echo "&offset=".($_GET["offset"]+1);?>">Back</a></div>
+		<?PHP 
+			if(isset($_GET["offset"]) && $_GET["offset"] != 0){
+		?>
+				<div style="float:right"><a href="stat.php?type=<?PHP echo $type;?>&n=<?PHP echo $n;?><?PHP echo "&offset=".($_GET["offset"]-1);?>">Forward</a></div>		
+		<?PHP
+			}
+		?>
+		</div>
 	</body>
 </html>
 

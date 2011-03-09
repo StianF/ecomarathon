@@ -119,7 +119,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					echo "</tr><tr>";
 					for($i = 0; $i < 46; $i++){
 						#echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=0&n=".$i."');\" style=\"cursor: pointer\" id=\"cell".$i."\"></td>";
-						echo "<td><a class='submodal-800-520' href=\"http://81.167.78.33/eco/stat.php?type=0&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"cell".$i."\"></a></td>";
+						echo "<td><a class='submodal-800-520' href=\"stat.php?type=0&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"cell".$i."\"></a></td>";
 					}
 				?>
 					</tr>
@@ -136,7 +136,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					echo "</tr><tr>";
 					for($i = 0; $i < 12; $i++){
 						//echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=2&n=".$i."');\" style=\"cursor: pointer\" id=\"tempsens".$i."\"></td>";
-						echo "<td><a class='submodal-800-520' href=\"http://81.167.78.33/eco/stat.php?type=2&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"tempsens".$i."\"></a></td>";
+						echo "<td><a class='submodal-800-520' href=\"stat.php?type=2&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"tempsens".$i."\"></a></td>";
 
 					}
 				?>
@@ -154,7 +154,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					echo "</tr><tr>";
 					for($i = 0; $i < 5; $i++){
 						//echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=4&n=".$i."');\" style=\"cursor: pointer\" id=\"outputvo".$i."\"></td>";
-						echo "<td><a class='submodal-800-520' href=\"http://81.167.78.33/eco/stat.php?type=4&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"outputvo".$i."\"></a></td>";
+						echo "<td><a class='submodal-800-520' href=\"stat.php?type=4&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"outputvo".$i."\"></a></td>";
 					}
 				?>
 					</tr>
@@ -171,7 +171,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					echo "</tr><tr>";
 					for($i = 0; $i < 3; $i++){
 					//	echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=3&n=".$i."');\" style=\"cursor: pointer\" id=\"pressures".$i."\"></td>";
-						echo "<td><a class='submodal-800-520' href=\"http://81.167.78.33/eco/stat.php?type=3&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"pressures".$i."\"></a></td>";
+						echo "<td><a class='submodal-800-520' href=\"stat.php?type=3&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"pressures".$i."\"></a></td>";
 					}
 				?>
 					</tr>
