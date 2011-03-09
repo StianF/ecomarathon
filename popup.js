@@ -50,7 +50,7 @@ function initPopUp() {
 	popcont.innerHTML = '' +
 		'<div id="popupInner">' +
 			'<div id="popupTitleBar">' +
-				'<div id="popupTitle"><b>History</b></div>' +
+				'<div id="popupTitle"></div>' +
 				'<div id="popupControls">' +
 					'<img src="close.gif" onclick="hidePopWin(false);" id="popCloseBox" />' +
 				'</div>' +

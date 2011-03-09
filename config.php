@@ -36,20 +36,37 @@
 include 'db.php';
 if(isset($_POST[config])){
 	foreach($_POST[config] as $key => $val){
-		$i = mysql_query("UPDATE config SET ".$key." = '".$val."'");
+		mysql_query("UPDATE config SET ".$key." = '".$val."'");
+	}
+}
+if(isset($_POST[laps])){
+	foreach($_POST[laps] as $key => $val){
+		mysql_query("UPDATE laps SET planned_time = ".$val." WHERE id = ".$key);
 	}
 }
 $config = mysql_query("SELECT * FROM config");
 //mysql_query("INSERT INTO config VALUES('http://org.ntnu.no/eitecov11/values2.php', NULL)");
 $config = mysql_fetch_assoc($config);
+$laps = mysql_query("SELECT * FROM laps");
 ?>
 		<form method="post">
 			<table>
+				<tr><th colspan=2>Config:</th></tr>
 				<tr>
 					<td>Adress:</td>
 					<td><input type="text" name="config[adress_for_data]" value="<?PHP echo $config[adress_for_data];?>"></td>
-					<tr><td colspan=2><input type="submit"></td></tr>
 				</tr>
+			</table>
+			<table>
+				<tr><th>Lap #</th><th>Planned time (in seconds)</th></tr>
+				<?PHP 
+					while($l = mysql_fetch_assoc($laps)){
+				?>
+				<tr><td><?PHP echo $l[id];?></td><td><input type="text" name="laps[<?PHP echo $l[id];?>]" value="<?PHP echo $l[planned_time];?>"></td></tr>
+				<?PHP
+					}
+				?>
+				<tr><td colspan=2><input type="submit" value="Save"></td></tr>
 			</table>
 		</form>
 	</body>

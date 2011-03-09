@@ -111,7 +111,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
   	</head>
 	<body onload="initialize()" onunload="GUnload()">
 		<div style="width:1250px;center;  margin-left: auto ;margin-right: auto ;">
-			<a href="config.php" class='submodal-800-520'>Config</a>
+			<a href="config.php" class='submodal-800-520' >Config</a>
 			<div style="text-align:center;">
 				<img src="DNV.jpg" height="100px"><h1>Shell Eco Marathon 2011</h1>
 				<form name="clock"><input type="text" name="stwa" value="00 : 00 : 00"><input type="button" name="theButton" onClick="stopwatchButton(this.value);" value="Start"><input type="button" onClick="stopwatchButton(this.value);reset();" value="Reset"></form>
