@@ -58,6 +58,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		var baseIcon;
 		var marker;
 		var icon;
+		var followcar = false;
+		var mapmodechanged = false;
     		function initialize() {
 			if (GBrowserIsCompatible()) {
 				map = new GMap2(document.getElementById("map_canvas"));
@@ -82,6 +84,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			if(typeof marker != "undefined" && typeof map != "undefined"){
 				map.removeOverlay(marker);
 			}
+
 			//var bounds = map.getBounds();
 			//var southWest = bounds.getSouthWest();
 			//var northEast = bounds.getNorthEast();
@@ -89,11 +92,17 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			//var latSpan = northEast.lat() - southWest.lat();
 			//var latlng = new GLatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
 			var latlng = new GLatLng(latitude, longitude);
-		
 			// Set up our GMarkerOptions object
 			markerOptions = { icon:icon };
 			marker = new GMarker(latlng, markerOptions);
 			if(typeof map != "undefined" ){
+				if(mapmodechanged){
+					map.setCenter(new GLatLng(51.5322, 13.9298));
+					mapmodechanged = false;
+				}
+				if(followcar){
+					map.setCenter(latlng);
+				}
 				map.addOverlay(marker);
 			}
 		}	
@@ -102,6 +111,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
   	</head>
 	<body onload="initialize()" onunload="GUnload()">
 		<div style="width:1250px;center;  margin-left: auto ;margin-right: auto ;">
+			<a href="config.php" class='submodal-800-520'>Config</a>
 			<div style="text-align:center;">
 				<img src="DNV.jpg" height="100px"><h1>Shell Eco Marathon 2011</h1>
 				<form name="clock"><input type="text" name="stwa" value="00 : 00 : 00"><input type="button" name="theButton" onClick="stopwatchButton(this.value);" value="Start"><input type="button" onClick="stopwatchButton(this.value);reset();" value="Reset"></form>
@@ -216,6 +226,10 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				</div>
 				<div style="float:right;">			
 					<div id="map_canvas" style="width: 500px; height: 400px"></div>
+					<form>
+					Follow Car: <input type="radio" name="followcar" onClick="followcar=true;">
+					Fixed map to track: <input type="radio" name="followcar" onClick="followcar=false;mapmodechanged=true;" checked >
+					</form>
 				</div>
 			<!--	<div style="width:1280px;">
 					<div class="chart" style="visibility:hidden">
@@ -309,7 +323,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					}
 				}
 				if(found){
-					$("#outputivbut").css("background-color", "red");
+					$("#outputvbut").css("background-color", "red");
 				}
 				found = false;
 				for(i = 0; i < 3; i++){
