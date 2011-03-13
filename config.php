@@ -44,14 +44,72 @@ if(isset($_POST[laps])){
 		mysql_query("UPDATE laps SET planned_time = ".$val." WHERE id = ".$key);
 	}
 }
+if(isset($_POST[sensor])){
+	foreach($_POST[sensor] as $key => $val){
+		foreach($_POST[sensor][$key] as $n => $name){
+			mysql_query("UPDATE type_sensor SET name='".$name."' WHERE n = ".$n." AND type_id = ".$key);
+		}
+	}
+}
 $config = mysql_query("SELECT * FROM config");
 //mysql_query("INSERT INTO config VALUES('http://org.ntnu.no/eitecov11/values2.php', NULL)");
 $config = mysql_fetch_assoc($config);
 $laps = mysql_query("SELECT * FROM laps");
 ?>
 		<form method="post">
+			<div style="float:left">
+			<h3>Edit sensor names:</h3>
 			<table>
-				<tr><th colspan=2>Config:</th></tr>
+				<tr><th colspan="2">Cell voltages:</th></tr>
+				<tr><td>#</td><td>Text</td></tr>
+				<?PHP
+				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 0");
+				while($name = mysql_fetch_assoc($names)){
+					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+				}
+				?>	
+			</table>
+			</div>
+			<div style="float:left">
+			<h3>&nbsp;</h3>
+			<table>
+				<tr><th colspan="2">Pressure sensor:</th></tr>
+				<tr><td>#</td><td>Text</td></tr>
+				<?PHP
+				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 1");
+				while($name = mysql_fetch_assoc($names)){
+					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+				}
+				?>	
+				<tr><th colspan="2">Temperature:</th></tr>
+				<tr><td>#</td><td>Text</td></tr>
+				<?PHP
+				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 2");
+				while($name = mysql_fetch_assoc($names)){
+					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+				}
+				?>	
+				<tr><th colspan="2">Pressure:</th></tr>
+				<tr><td>#</td><td>Text</td></tr>
+				<?PHP
+				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 3");
+				while($name = mysql_fetch_assoc($names)){
+					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+				}
+				?>
+				<tr><th colspan="2">Output:</th></tr>
+				<tr><td>#</td><td>Text</td></tr>
+				<?PHP
+				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 4");
+				while($name = mysql_fetch_assoc($names)){
+					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+				}
+				?>	
+			</table>
+			</div>
+			<div style="float:left">
+			<h3>Other stuff:</h3>
+			<table>
 				<tr>
 					<td>Adress:</td>
 					<td><input type="text" name="config[adress_for_data]" value="<?PHP echo $config[adress_for_data];?>"></td>
@@ -68,7 +126,8 @@ $laps = mysql_query("SELECT * FROM laps");
 				?>
 				<tr><td colspan=2><input type="submit" value="Save"></td></tr>
 			</table>
-		</form>
+			</div>
+					</form>
 	</body>
 </html>
 <?PHP mysql_close($conn);?>

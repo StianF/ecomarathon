@@ -14,27 +14,27 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		<link rel="stylesheet" type="text/css" href="style.css" />	
 		<link rel="stylesheet" type="text/css" href="popup.css" />	
 
-		<script language="javascript" type="text/javascript" src="common.js"></script> 
-		<script language="javascript" type="text/javascript" src="popup.js"></script>
+		<script type="text/javascript" src="common.js"></script> 
+		<script type="text/javascript" src="popup.js"></script>
 
 		<!-- BEGIN: load jquery --> 
-			<script language="javascript" type="text/javascript" src="jquery-1.4.2.min.js"></script> 
+			<script type="text/javascript" src="jquery-1.4.2.min.js"></script> 
 		<!-- END: load jquery --> 
 
 		<!-- BEGIN: stopwatch -->
-			<script language="javascript" type="text/javascript" src="stopwatch.js"></script> 
+			<script type="text/javascript" src="stopwatch.js"></script> 
 		<!-- END: stopwatch -->		
 	
 		<!-- BEGIN: prefetch values-->
-			<script language="javascript" type="text/javascript" src="<?PHP echo $_SESSION[config][adress_for_data];?>"></script> 
+			<script type="text/javascript" src="<?PHP echo $_SESSION[config][adress_for_data];?>"></script> 
 		<!-- END: prefetch values -->	
 		<!--Gauges (Fucker opp jqBarGraph)-->
-			<script type="text/javascript" src="bindows_gauges.js"></script>
+		<!--	<script type="text/javascript" src="bindows_gauges.js"></script>-->
 	
 		<!-- BEGIN: highcharts -->
-			<script language="javascript" type="text/javascript" src="highcharts.js"></script>
+<!--			<script language="javascript" type="text/javascript" src="highcharts.js"></script>-->
 		<!-- END: highcharts -->
-	<script language="javascript" type="text/javascript">
+	<script type="text/javascript">
 		function toggleLayer( whichLayer ) {
 		  var elem, vis;
 			if( document.getElementById ) 
@@ -44,7 +44,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			else if( document.layers )
 				elem = document.layers[whichLayer];
 				vis = elem.style;
-			if(vis.display==''&&elem.offsetWidth!=undefined&&elem.offsetHeight!=undefined)
+			if(vis.display=='' && elem.offsetWidth != undefined && elem.offsetHeight!=undefined)
 				vis.display = (elem.offsetWidth!=0&&elem.offsetHeight!=0)?'block':'none';
 				vis.display = (vis.display==''||vis.display=='block')?'none':'block';
 			}
@@ -97,7 +97,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			marker = new GMarker(latlng, markerOptions);
 			if(typeof map != "undefined" ){
 				if(mapmodechanged){
-					map.setCenter(new GLatLng(51.5322, 13.9298));
+					map.setCenter(new GLatLng(51.5322, 13.9298), 15);
 					mapmodechanged = false;
 				}
 				if(followcar){
@@ -105,7 +105,14 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				}
 				map.addOverlay(marker);
 			}
-		}	
+		}
+		function setFollow(){
+			followcar = true;
+		}
+		function unsetFollow(){
+			followcar = false;
+			mapmodechanged = true;
+		}
 
 	</script>
   	</head>
@@ -123,11 +130,22 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				<table>
 					<tr>
 				<?PHP
-					for($i = 0; $i < 46; $i++){
-						echo "<td>Cell ".$i."</td>";
+					for($i = 0; $i < 23; $i++){
+						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 0 AND n = ".$i));
+						echo "<td>".$name[name]."</td>";
 					}
 					echo "</tr><tr>";
-					for($i = 0; $i < 46; $i++){
+					for($i = 0; $i < 23; $i++){
+						#echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=0&n=".$i."');\" style=\"cursor: pointer\" id=\"cell".$i."\"></td>";
+						echo "<td><a class='submodal-800-520' href=\"stat.php?type=0&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"cell".$i."\"></a></td>";
+					}
+					echo "</tr><tr>";
+					for($i = 23; $i < 46; $i++){
+						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 0 AND n = ".$i));
+						echo "<td>".$name[name]."</td>";
+					}
+					echo "</tr><tr>";
+					for($i = 23; $i < 46; $i++){
 						#echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=0&n=".$i."');\" style=\"cursor: pointer\" id=\"cell".$i."\"></td>";
 						echo "<td><a class='submodal-800-520' href=\"stat.php?type=0&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"cell".$i."\"></a></td>";
 					}
@@ -141,7 +159,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					<tr>
 				<?PHP
 					for($i = 0; $i < 12; $i++){
-						echo "<td>Sensor ".$i."</td>";
+						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 2 AND n = ".$i));
+						echo "<td>".$name[name]."</td>";
 					}
 					echo "</tr><tr>";
 					for($i = 0; $i < 12; $i++){
@@ -159,7 +178,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					<tr>
 				<?PHP
 					for($i = 0; $i < 5; $i++){
-						echo "<td>Output ".$i."</td>";
+						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 4 AND n = ".$i));
+						echo "<td>".$name[name]."</td>";
 					}
 					echo "</tr><tr>";
 					for($i = 0; $i < 5; $i++){
@@ -176,7 +196,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					<tr>
 				<?PHP
 					for($i = 0; $i < 3; $i++){
-						echo "<td>Pressure ".$i."</td>";
+						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 3 AND n = ".$i));
+						echo "<td>".$name[name]."</td>";
 					}
 					echo "</tr><tr>";
 					for($i = 0; $i < 3; $i++){
@@ -227,8 +248,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				<div style="float:right;">			
 					<div id="map_canvas" style="width: 500px; height: 400px"></div>
 					<form>
-					Follow Car: <input type="radio" name="followcar" onClick="followcar=true;">
-					Fixed map to track: <input type="radio" name="followcar" onClick="followcar=false;mapmodechanged=true;" checked >
+					Fixed map to track: <input type="radio" name="followcar" onClick="unsetFollow();" checked >
+					Follow Car: <input type="radio" name="followcar" onClick="setFollow();">
 					</form>
 				</div>
 			<!--	<div style="width:1280px;">
@@ -250,7 +271,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			if ($_SESSION[config][time] != "0000-00-00 00:00:00"){
 				$time = strtotime("now")-strtotime($_SESSION[config][time]);
 				echo "var sec = ".($time%60).";";
-				echo "var min = ".floor($time/60).";";
+				echo "var min = ".(floor($time/60)%60).";";
 				echo "var hour = ".floor($time/3600).";";
 				if($_SESSION[config][time_status] == 1){
 					echo "stopwatch(\"Start\");";
