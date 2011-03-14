@@ -4,13 +4,31 @@ session_start();
 $values = $_POST['data'];
 
 if(isset($_POST['data'])){
+echo $_POST['data'];
 	$values = preg_split("/,/",$values, -1, PREG_SPLIT_NO_EMPTY);
 	$out = "";
 	$current = "NA";
 	$current_n = 0;
-	$maxdate = mysql_fetch_assoc(mysql_query("SELECT max(time) as time FROM log"));
-	$save_db = (strtotime("now")-strtotime($maxdate[time]))>10;
+#	$maxdate = mysql_fetch_assoc(mysql_query("SELECT max(time) as time FROM log"));
+#	$save_db = (strtotime("now")-strtotime($maxdate[time]))>10;
+	$save_db = true;
 	$gps = array();
+
+	function save_to_db($t,$n,$v){
+		$type = -1;
+		if($t == "V"){
+			$type = 0;
+		}else if($t == "S"){
+			$type = 1;
+		}else if($t == "T"){
+			$type = 2;
+		}else if($t == "P"){
+			$type = 3;
+		}else if($t == "O"){
+			$type = 4;
+		}
+		mysql_query("INSERT INTO log (type,n,value) VALUES (".$type.",".$n.",".$v.")");
+	}
 	foreach($values as $v){
 		if($v == "V"){
 			$current = $v;
@@ -37,7 +55,7 @@ if(isset($_POST['data'])){
 			}
 		}else if($v != "\n"){
 			if($save_db){
-				if($current = "G"){
+				if($current == "G"){
 					array_push($gps, $v);
 				}else{
 					save_to_db($current,$current_n++,$v);
@@ -45,25 +63,11 @@ if(isset($_POST['data'])){
 			}
 		}
 	}
-	if($save_db){
-		mysql_query("INSERT INTO gps(latitude,longitude,speed) VALUES('".$gps[0]."',".$gps[1]."',".$gps[2].")");
+	if($save_db && count($gps) >= 3){
+		mysql_query("INSERT INTO gps(latitude,longitude,speed) VALUES('".$gps[0]."','".$gps[1]."',".$gps[2].")");
 	}
 
-	function save_to_db($t,$n,$v){
-		$type = -1;
-		if($t == "V"){
-			$type = 0;
-		}else if($t == "S"){
-			$type = 1;
-		}else if($t == "T"){
-			$type = 2;
-		}else if($t == "P"){
-			$type = 3;
-		}else if($t == "O"){
-			$type = 4;
-		}
-		mysql_query("INSERT INTO log (type,n,value) VALUES (".$type.",".$n.",".$v.")");
-	}
+
 
 	$cp = mysql_fetch_assoc(mysql_query("SELECT r.id as rid, r.*, c.* FROM realcps r JOIN cps c ON c.id = r.cp_id WHERE visited = 0 ORDER BY r.id ASC LIMIT 1"));
 	$last_cp = mysql_query("SELECT * FROM realcps r JOIN cps c ON c.id = r.cp_id WHERE r.visited = 1 AND r.id < ".$cp[rid]." AND c.finish = 1 ORDER BY r.id DESC LIMIT 1");
