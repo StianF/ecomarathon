@@ -119,10 +119,10 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 	<body onload="initialize()" onunload="GUnload()">
 		<div style="width:1250px;center;  margin-left: auto ;margin-right: auto ;">
 			<a href="config.php" class='submodal-800-520' >Config</a>
-			<div style="text-align:center;">
-				<img src="DNV.jpg" height="100px"><h1>Shell Eco Marathon 2011</h1>
+			<center>
+				<table><tr><td><img src="DNV.jpg" height="100px"></td><td><h1>Shell Eco Marathon 2011</h1></td><td><img src="shell.jpg" height="100px"></td></tr></table>
 				<form name="clock"><input type="text" name="stwa" value="00 : 00 : 00"><input type="button" name="theButton" onClick="stopwatchButton(this.value);" value="Start"><input type="button" onClick="stopwatchButton(this.value);reset();" value="Reset"></form>
-			</div>
+			</center>
 			<hr>
 			<div style="float:top;font-size:75%">
 			<input type="button" onClick="showhide('cellvolt');" id="cellbut" value="Cell Voltage">
