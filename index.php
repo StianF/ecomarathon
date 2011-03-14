@@ -284,6 +284,26 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			<?PHP
 			}
 			?>
+			<?PHP
+				$thre = mysql_query("SELECT * FROM type_sensor");
+				$thresholds = array();
+				while($t = mysql_fetch_assoc($thre)){
+					$thresholds[$t[type_id]][$t[n]] = array($t[min],$t[max]);
+				}
+				$out = "";
+				foreach($thresholds as $o){
+					$out .= (($out == "")?"[":",[");
+					foreach($o as $i){
+						if(substr($out, count($out)-1, strlen($out))=="[,"){
+						echo "Bash";
+							$out = substr($out, 0, strlen($out)-1);
+						}
+						$out .= ((substr($out, strlen($out)-1, strlen($out)) == "[")?"[":",[").$i[0].",".$i[1]."]";
+					}
+					$out .= "]";
+				}
+				echo "var threshold = [".$out."];";
+			?>
 			function showhide(div) {
 
 				if($("#"+div).css("display") == "none"){
@@ -304,7 +324,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				found = false;
 				for(i = 0; i < 46; i++){
 					$("#cell"+i).text(cell_voltage[i]+" V");
-					if(cell_voltage[i] == 0.0 || cell_voltage[i] > 1.8){
+					if(cell_voltage[i] < threshold[0][i][0] || cell_voltage[i] > threshold[0][i][1]){
 						$("#cell"+i).css("color", "red");
 						found = true;
 					}else if($("#cell"+i).css("color") == "red" || $("#cell"+i).css("color") == "rgb(255, 128, 64)"){
@@ -319,7 +339,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				found = false;
 				for(i = 0; i < 12; i++){
 					$("#tempsens"+i).text(temperature[i]+" C");
-					if(temperature[i] == 0.0 || temperature[i] > 40){
+					if(temperature[i] < threshold[2][i][0] || temperature[i] > threshold[2][i][1]){
 						$("#tempsens"+i).css("color", "red");
 						found = true;
 					}else if($("#tempsens"+i).css("color") == "red" || $("#tempsens"+i).css("color") == "rgb(255, 128, 64)"){
@@ -334,7 +354,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				found = false;
 				for(i = 0; i < 5; i++){
 					$("#outputvo"+i).text(fuelcell_out[i]+" V");
-					if(fuelcell_out[i] == 0.0 || fuelcell_out[i] > 18){
+					if(fuelcell_out[i] < threshold[4][i][0] || fuelcell_out[i] > threshold[4][i][1]){
 						$("#outputvo"+i).css("color", "red");
 						found = true;
 					}else if($("#outputvo"+i).css("color") == "red" || $("#outputvo"+i).css("color") == "rgb(255, 128, 64)"){
@@ -349,7 +369,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				found = false;
 				for(i = 0; i < 3; i++){
 					$("#pressures"+i).text(pressure[i]+" Pa");
-					if(pressure[i] == 0.0 || pressure[i] > 18 || pressure[i] == "err"){
+					if(pressure[i] < threshold[3][i][0] || pressure[i] > threshold[3][i][1] || pressure[i] == "err"){
 						$("#pressures"+i).css("color", "red");
 						found = true;
 					}else if($("#pressures"+i).css("color") == "red" || $("#pressures"+i).css("color") == "rgb(255, 128, 64)"){

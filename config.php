@@ -47,7 +47,7 @@ if(isset($_POST[laps])){
 if(isset($_POST[sensor])){
 	foreach($_POST[sensor] as $key => $val){
 		foreach($_POST[sensor][$key] as $n => $name){
-			mysql_query("UPDATE type_sensor SET name='".$name."' WHERE n = ".$n." AND type_id = ".$key);
+			mysql_query("UPDATE type_sensor SET name='".$name[0]."', min =".$name[1].", max=".$name[2]." WHERE n = ".$n." AND type_id = ".$key);
 		}
 	}
 }
@@ -59,13 +59,17 @@ $laps = mysql_query("SELECT * FROM laps");
 		<form method="post">
 			<div style="float:left">
 			<h3>Edit sensor names:</h3>
-			<table>
+			<table >
 				<tr><th colspan="2">Cell voltages:</th></tr>
-				<tr><td>#</td><td>Text</td></tr>
+				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 0");
 				while($name = mysql_fetch_assoc($names)){
-					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+					echo "<tr>";
+					echo "<td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][0]\" value=\"".$name[name]."\" size=8></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][1]\" value=\"".$name[min]."\" size=2></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][2]\" value=\"".$name[max]."\" size=2></td>";
+					echo "</tr>";
 				}
 				?>	
 			</table>
@@ -74,35 +78,51 @@ $laps = mysql_query("SELECT * FROM laps");
 			<h3>&nbsp;</h3>
 			<table>
 				<tr><th colspan="2">Pressure sensor:</th></tr>
-				<tr><td>#</td><td>Text</td></tr>
+				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 1");
 				while($name = mysql_fetch_assoc($names)){
-					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+					echo "<tr>";
+					echo "<td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][0]\" value=\"".$name[name]."\" size=8></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][1]\" value=\"".$name[min]."\" size=2></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][2]\" value=\"".$name[max]."\" size=2></td>";
+					echo "</tr>";
 				}
 				?>	
 				<tr><th colspan="2">Temperature:</th></tr>
-				<tr><td>#</td><td>Text</td></tr>
+				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 2");
 				while($name = mysql_fetch_assoc($names)){
-					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+					echo "<tr>";
+					echo "<td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][0]\" value=\"".$name[name]."\" size=8></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][1]\" value=\"".$name[min]."\" size=2></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][2]\" value=\"".$name[max]."\" size=2></td>";
+					echo "</tr>";				
 				}
 				?>	
 				<tr><th colspan="2">Pressure:</th></tr>
-				<tr><td>#</td><td>Text</td></tr>
+				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 3");
 				while($name = mysql_fetch_assoc($names)){
-					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+					echo "<tr>";
+					echo "<td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][0]\" value=\"".$name[name]."\" size=8></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][1]\" value=\"".$name[min]."\" size=2></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][2]\" value=\"".$name[max]."\" size=2></td>";
+					echo "</tr>";								
 				}
 				?>
 				<tr><th colspan="2">Output:</th></tr>
-				<tr><td>#</td><td>Text</td></tr>
+				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 4");
 				while($name = mysql_fetch_assoc($names)){
-					echo "<tr><td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."]\" value=\"".$name[name]."\"></td></tr>";
+					echo "<tr>";
+					echo "<td>".$name[n]."</td><td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][0]\" value=\"".$name[name]."\" size=8></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][1]\" value=\"".$name[min]."\" size=2></td>";
+					echo "<td><input type=\"text\" name=\"sensor[".$name[type_id]."][".$name[n]."][2]\" value=\"".$name[max]."\" size=2></td>";
+					echo "</tr>";											
 				}
 				?>	
 			</table>
