@@ -22,7 +22,7 @@
 		}else if($action == "reset_clock"){
 			mysql_query("UPDATE config SET time_status = 0, time_stopped_at = '0000-00-00 00:00:00', time = '0000-00-00 00:00:00'");
 			mysql_query("UPDATE laps SET time = NULL");
-			mysql_query("UPDATE realcps SET visited = 0");
+			mysql_query("UPDATE realcps SET visited = 0, visited_at = '0000-00-00 00:00:00'");
 		}
 		return;
 	}

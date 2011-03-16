@@ -75,8 +75,8 @@ echo $_POST['data'];
 		$last_cp = mysql_fetch_assoc($last_cp);
 	}
 
-	$lat = $gpsarray[0];
-	$long = $gpsarray[1];
+	$lat = $gps[1];
+	$long = $gps[0];
 
 	$started = mysql_fetch_assoc(mysql_query("SELECT * FROM config"));
 

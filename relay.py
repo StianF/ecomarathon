@@ -25,6 +25,8 @@ while 1:
 		if not data:
 			print("no data")
 			break
+		else:
+			print(data)
 		h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
 		h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
 		response = h1.getresponse()
