@@ -73,26 +73,19 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				// shadow, icon dimensions, etc.
 				baseIcon = new GIcon(G_DEFAULT_ICON);
 				baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
-				baseIcon.iconSize = new GSize(20, 34);
+				baseIcon.iconSize = new GSize(34, 34);
 				baseIcon.shadowSize = new GSize(37, 34);
 				baseIcon.iconAnchor = new GPoint(9, 34);
 				baseIcon.infoWindowAnchor = new GPoint(9, 2);
 					
 				icon = new GIcon(baseIcon);
-				icon.image = "car.png";
+				icon.image = "ff-logo-small.png";
 			}
 		}
 		function setCarPos(latitude, longitude){
 			if(typeof marker != "undefined" && typeof map != "undefined"){
 				map.removeOverlay(marker);
 			}
-
-			//var bounds = map.getBounds();
-			//var southWest = bounds.getSouthWest();
-			//var northEast = bounds.getNorthEast();
-			//var lngSpan = northEast.lng() - southWest.lng();
-			//var latSpan = northEast.lat() - southWest.lat();
-			//var latlng = new GLatLng(southWest.lat() + latSpan * Math.random(), southWest.lng() + lngSpan * Math.random());
 			var latlng = new GLatLng(latitude, longitude);
 			// Set up our GMarkerOptions object
 			markerOptions = { icon:icon };
@@ -122,7 +115,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		<div style="width:1250px;center;  margin-left: auto ;margin-right: auto ;">
 			<a href="config.php" class='submodal-800-520' >Config</a>
 			<center>
-				<table><tr><td><img src="DNV.jpg" height="100px"></td><td><h1>Shell Eco Marathon 2011</h1></td><td><img src="shell.jpg" height="100px"></td></tr></table>
+			<div id="header"></div>
+		<!--	<table><tr><td><img src="DNV.jpg" height="100px"></td><td><h1>Shell Eco Marathon 2011</h1></td><td><img src="shell.jpg" height="100px"></td></tr></table>-->
 				<form name="clock"><input type="text" name="stwa" value="00 : 00 : 00"><input type="button" name="theButton" onClick="stopwatchButton(this.value);" value="Start"><input type="button" onClick="stopwatchButton(this.value);reset();" value="Reset"></form>
 			</center>
 			<hr>

@@ -3,7 +3,8 @@ include "db.php";
 
 $types = mysql_query("SELECT * FROM type");
 $sum = mysql_fetch_assoc(mysql_query("SELECT sum(n_sensors) as sum FROM type"));
-$values = mysql_query("SELECT * FROM log ORDER BY time DESC LIMIT ".$sum[sum]);
+$count = mysql_fetch_assoc(mysql_query("SELECT COUNT(*) as count FROM log"));
+$values = mysql_query("SELECT * FROM log LIMIT ".($count[count]-$sum[sum]).",".$sum[sum]);
 $real_values = array();
 while($v = mysql_fetch_assoc($values)){
 	$real_values[$v[type]][$v[n]] = $v[value];
@@ -36,7 +37,7 @@ while($type = mysql_fetch_assoc($types)){
 }
 
 $cp = mysql_query("SELECT * FROM realcps r JOIN cps c ON c.id = r.cp_id WHERE r.visited = 1 ORDER BY r.id DESC LIMIT 1");
-if($last_cp){
+if($cp){
 	$last_cp = mysql_fetch_assoc($cp);
 }
 
@@ -60,7 +61,7 @@ if($updated_lap[id] != null){
 		echo "$('#avgspeed').text(\"".round($avgspeed,1)." km/h\");";
 	}
 }
-$gps = mysql_fetch_assoc(mysql_query("SELECT * FROM gps ORDER BY time DESC LIMIT 1"));
+$gps = mysql_fetch_assoc(mysql_query("SELECT * FROM gps WHERE id = (SELECT MAX(id) FROM gps)"));
 ?>
 pos = [[<?PHP echo $gps[longitude];?>,<?PHP echo $gps[latitude];?>]];
 index = 0;

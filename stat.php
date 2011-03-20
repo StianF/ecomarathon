@@ -20,10 +20,10 @@ while($a = mysql_fetch_assoc($hist)){
 }
 $hista = array_reverse($hista);
 $a = $hista[0];
-$series = "[['".$a[time]."',".$a[value]."]";
+$series = "[[".strtotime($a[time])."000,".$a[value]."]";
 for($i = 1; $i < count($hista); $i++){
 	$a = $hista[$i];
-	$series .= ",['".$a[time]."',".$a[value]."]";
+	$series .= ",[".strtotime($a[time])."000,".$a[value]."]";
 }
 $series .= "]";
 mysql_close($conn);
@@ -49,10 +49,16 @@ mysql_close($conn);
 							text: "<?PHP echo $info[name]." ".$n;?>"
 						},
 						xAxis: {
-
+							type: 'datetime'
+						},
+						tooltip: {
+							formatter: function(){
+								var date = new Date(this.point.x);
+								return "<b>"+date.toUTCString()+'</b>: '+this.y+' <?PHP echo $info[unit];?>';
+							}
 						},
 						yAxis: {
-							title: "<?PHP echo $infor[unit];?>"
+							title: "<?PHP echo $info[unit];?>"
 						},
 						legend: {
 							enabled: false

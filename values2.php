@@ -1,4 +1,5 @@
 <?PHP
+exit;
 include "db.php";
 session_start();
 $values = fgets(fopen("http://81.167.78.33/eco/values.php", "r"));
@@ -17,6 +18,7 @@ $current = "NA";
 $current_n = 0;
 $maxdate = mysql_fetch_assoc(mysql_query("SELECT max(time) as time FROM log"));
 $save_db = (strtotime("now")-strtotime($maxdate[time]))>10;
+$save_db = false;
 foreach($values as $v){
 	if($v == "V"){
 		$current = $v;

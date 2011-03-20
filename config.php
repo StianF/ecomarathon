@@ -26,6 +26,9 @@
 		}
 		return;
 	}
+	if(isset($_GET['emptylog'])){
+		mysql_query("TRUNCATE table log");
+	}
 ?>
 <html>
 	<head>
@@ -56,6 +59,9 @@ $config = mysql_query("SELECT * FROM config");
 $config = mysql_fetch_assoc($config);
 $laps = mysql_query("SELECT * FROM laps");
 ?>
+		<form method="get">
+			<input type="submit" value="Empty log" name="emptylog">
+		</form>
 		<form method="post">
 			<div style="float:left">
 			<h3>Edit sensor names:</h3>
