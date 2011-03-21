@@ -291,7 +291,6 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					$out .= (($out == "")?"[":",[");
 					foreach($o as $i){
 						if(substr($out, count($out)-1, strlen($out))=="[,"){
-						echo "Bash";
 							$out = substr($out, 0, strlen($out)-1);
 						}
 						$out .= ((substr($out, strlen($out)-1, strlen($out)) == "[")?"[":",[").$i[0].",".$i[1]."]";
