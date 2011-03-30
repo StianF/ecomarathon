@@ -30,7 +30,6 @@ while 1:
 			break
 		else:
 			print("got some\n")
-			print(data)
 			pattern = "G,\d*,\d*,\d*,\d*,\d*,\d*,\d*,\d*"
 			pos = re.search(pattern, data)
 			if pos:
@@ -45,6 +44,7 @@ while 1:
 				lon  = int(pos[8]) / 600000.0
 				data = re.sub(pattern, "G," + str(lat) + "," + str(lon), data)
 			
+			print(data)
 			h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
 			h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
 			response = h1.getresponse()
