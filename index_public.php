@@ -178,7 +178,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				echo "var min = ".(floor($time/60)%60).";";
 				echo "var hour = ".floor($time/3600).";";
 				if($_SESSION[config][time_status] == 1){
-					echo "stopwatch(\"Start\");";
+			#		echo "stopwatch(\"Start\");";
 				}
 			}else{	
 			?>

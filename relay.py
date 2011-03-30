@@ -4,7 +4,7 @@ import socket
 import httplib
 import urllib
 
-C_PORT = 42424 		#Port used by telemetry unit
+C_PORT = 45987 		#Port used by telemetry unit
 C_ADDR = None
 S_PORT = 80		#Port used to connect to the webserver
 S_ADDR = "81.167.78.33"	#Server address

@@ -5,7 +5,7 @@ import sys
 import random
 import time
 
-S_PORT = 42424		#Port used to connect to the relayserver
+S_PORT = 45987		#Port used to connect to the relayserver
 S_ADDR = "81.167.78.33"	#Server address
 
 s = None
