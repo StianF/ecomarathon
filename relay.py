@@ -28,17 +28,17 @@ while 1:
 			break
 		else:
 			print(data)
-			pos = re.match("G,\d*,\d*,",data)
-			pos = pos.split(",",3)
-			lat  = ((pos[1] >> 24) & 255) * 1.0
-			lat += ((pos[1] >> 16) & 255) / 60.0
-			lat += ((pos[1] >>  8) & 255) / 6000.0
-			lat += ((pos[1] >>  0) & 255) / 600000.0
-			lon  = ((pos[2] >> 24) & 255) * 1.0
-			lon += ((pos[2] >> 16) & 255) / 60.0
-			lon += ((pos[2] >>  8) & 255) / 6000.0
-			lon += ((pos[2] >>  0) & 255) / 600000.0
-			data = re.sub("G,\d*\d*,","G," + str(lat) + str(lon) + "," + pos[3],data)
+			pos = re.search("G,\d,\d,",data)
+			pos = pos.group(0).split(",",3)
+			lat  = ((int(pos[1]) >> 24) & 255) * 1.0
+			lat += ((int(pos[1]) >> 16) & 255) / 60.0
+			lat += ((int(pos[1]) >>  8) & 255) / 6000.0
+			lat += ((int(pos[1]) >>  0) & 255) / 600000.0
+			lon  = ((int(pos[2]) >> 24) & 255) * 1.0
+			lon += ((int(pos[2]) >> 16) & 255) / 60.0
+			lon += ((int(pos[2]) >>  8) & 255) / 6000.0
+			lon += ((int(pos[2]) >>  0) & 255) / 600000.0
+			data = re.sub("G,\d*,\d*","G," + str(lat) + "," + str(lon), data)
 			
 		h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
 		h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
