@@ -18,7 +18,7 @@ for res in socket.getaddrinfo(C_ADDR, C_PORT, socket.AF_UNSPEC, socket.SOCK_STRE
 	c_srv_soc.bind(c_sa)
 	c_srv_soc.listen(1)
 	break
-	
+data = ""
 while 1:
 	car_soc, addr = c_srv_soc.accept()
 	while 1:
@@ -29,6 +29,7 @@ while 1:
 			print("no data")
 			break
 		else:
+			print("got some\n")
 			print(data)
 			pos = re.search("G,\d,\d,",data)
 			if pos:
@@ -43,13 +44,14 @@ while 1:
 				lon += ((int(pos[2]) >>  0) & 255) / 600000.0
 				data = re.sub("G,\d*,\d*","G," + str(lat) + "," + str(lon), data)
 			
-		h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
-		h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
-		response = h1.getresponse()
-		if response.status != 200:
-			print("http error")
-			break
-		data = response.read()
-		h1.close
+				h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
+				h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
+				response = h1.getresponse()
+				if response.status != 200:
+					print("http error")
+					break
+				data = response.read()
+				data = ""
+				h1.close
 	car_soc.close()
 c_srv_soc.close()

@@ -64,8 +64,9 @@ echo $_POST['data'];
 			}
 		}
 	}
-	if($save_db && count($gps) >= 3){
-		mysql_query("INSERT INTO gps(latitude,longitude,speed) VALUES('".$gps[0]."','".$gps[1]."',".$gps[2].")");
+	if($save_db && count($gps) >= 2){
+		echo "INSERT INTO gps(latitude,longitude,speed) VALUES('".$gps[0]."','".$gps[1]."',".((isset($gps[2]) && $gps[2] != " ")?$gps[2]:"0").")";
+		mysql_query("INSERT INTO gps(latitude,longitude,speed) VALUES('".$gps[0]."','".$gps[1]."',".((isset($gps[2]) && $gps[2] != " ")?$gps[2]:"0").")");
 	}
 
 
