@@ -1,6 +1,7 @@
 <?PHP
 include "db.php";
 session_start();
+$_POST['data'] = str_replace("\n","",$_POST['data']);
 $values = $_POST['data'];
 
 if(isset($_POST['data'])){
