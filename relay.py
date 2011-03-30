@@ -27,6 +27,7 @@ while 1:
 			data += car_soc.recv(1024)
 		if not data:
 			print("no data")
+			car_soc.close()
 			break
 		else:
 			print("got some\n")
@@ -38,10 +39,12 @@ while 1:
 				lat += int(pos[2]) / 60.0
 				lat += int(pos[3]) / 6000.0
 				lat += int(pos[4]) / 600000.0
+
 				lon  = int(pos[5]) * 1.0
-				lon  = int(pos[6]) / 60.0
-				lon  = int(pos[7]) / 6000.0
-				lon  = int(pos[8]) / 600000.0
+				lon += int(pos[6]) / 60.0
+				lon += int(pos[7]) / 6000.0
+				lon += int(pos[8]) / 600000.0
+
 				data = re.sub(pattern, "G," + str(lat) + "," + str(lon), data)
 			
 			print(data)
@@ -54,5 +57,5 @@ while 1:
 			data = response.read()
 			data = ""
 			h1.close
-	car_soc.close()
+		car_soc.close()
 c_srv_soc.close()
