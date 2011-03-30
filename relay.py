@@ -29,6 +29,8 @@ while 1:
 		else:
 			print(data)
 			pos = re.search("G,\d,\d,",data)
+			if not pos:
+				break
 			pos = pos.group(0).split(",",3)
 			lat  = ((int(pos[1]) >> 24) & 255) * 1.0
 			lat += ((int(pos[1]) >> 16) & 255) / 60.0
