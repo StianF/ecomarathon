@@ -30,6 +30,7 @@ while 1:
 			car_soc.close()
 			break
 		else:
+			print(data)
 			print("got some\n")
 			pattern = "G,\d*,\d*,\d*,\d*,\d*,\d*,\d*,\d*"
 			pos = re.search(pattern, data)
@@ -57,5 +58,5 @@ while 1:
 			data = response.read()
 			data = ""
 			h1.close
-		car_soc.close()
+	car_soc.close()
 c_srv_soc.close()

@@ -240,6 +240,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 						</td>
 					</tr>
 					</table>
+					<div width=50>Speed: <div id="speed">0.0</div> km/h</div>
 				</div>
 				<div style="float:right;">			
 					<div id="map_canvas" style="width: 500px; height: 400px"></div>
@@ -261,6 +262,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			
 		<script type="text/javascript">
 			var pos;
+			var speed = 0.0;
 			var visibleChart = 0;
 			var visibleCount = 0;
 			<?PHP 
@@ -377,6 +379,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					$("#pressurebut").css("background-color", "red");
 				}
 				setCarPos(pos[index][0], pos[index][1]);
+				$("#speed").text(speed);
 				setTimeout(updateValues, 2000);
 			}
 			function stopwatchButton(value){

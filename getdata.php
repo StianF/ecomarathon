@@ -64,5 +64,6 @@ if($updated_lap[id] != null){
 $gps = mysql_fetch_assoc(mysql_query("SELECT * FROM gps WHERE id = (SELECT MAX(id) FROM gps)"));
 ?>
 pos = [[<?PHP echo $gps[longitude];?>,<?PHP echo $gps[latitude];?>]];
+speed = <?PHP echo $gps[speed];?>;
 index = 0;
 <?PHP mysql_close($conn); ?>
