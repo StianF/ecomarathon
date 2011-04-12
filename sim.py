@@ -59,7 +59,7 @@ while(1):
 		for i in range(5):
 			data += "%.2f" % ((random.random()%24)) + ","
 
-		data += "G,0,0,0,0,0,0,0,0,\n"
+		data += "G,0,0,0,0,0,0,0,0,0,\n"
 
 		print(data)
 		s.send(data)

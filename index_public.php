@@ -26,7 +26,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			<script type="text/javascript" src="<?PHP echo $_SESSION[config][adress_for_data];?>"></script> 
 		<!-- END: prefetch values -->	
 		<!--Gauges (Fucker opp jqBarGraph)-->
-		<!--	<script type="text/javascript" src="bindows_gauges.js"></script>-->
+		<script type="text/javascript" src="bindows_gauges.js"></script>
 	
 		<!-- BEGIN: highcharts -->
 <!--			<script language="javascript" type="text/javascript" src="highcharts.js"></script>-->
@@ -114,40 +114,46 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			</center>
 			<hr>
 			<div id="content">
-				<div style="float:left;margin-top:5px;">
-					<table border="1" width="500px">
-						<tr><th>Lap #</th><th>Actual Time</th><th>Planned time</th><th>Diff</th><th>Avg speed</th></tr>
-						<?PHP $times = mysql_query("SELECT * FROM laps");
-							$totalplanned = 0;
-							$totaltime = 0;
-						while($lap = mysql_fetch_assoc($times)){
-							$totalplanned += $lap[planned_time];
-							$totaltime += $lap[time];
-							echo "<tr>";
-							echo "<td>".$lap[id]."</td>";
-							echo "<td id=\"lap".$lap[id]."\">".(($lap[time] != "")?floor($lap[time]/60).":".str_pad($lap[time]%60, 2, "0", STR_PAD_LEFT):"")."</td>";
-							echo "<td>".floor($lap[planned_time]/60).":".str_pad($lap[planned_time]%60, 2, "0", STR_PAD_LEFT)."</td>";
-							$diff = $lap[time]-$lap[planned_time];
-							echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
-							echo "<td id=\"avglap".$lap[id]."\">".(($lap[time] != 0)?round((3173/$lap[time])*3.6, 2)." km/h":"")."</td>";
-							echo "</tr>";
-						}
-						?>
-					<tr><td>Total</td>
-						<td id="totaltime"><?PHP echo floor($totaltime/60).":".str_pad($totaltime%60, 2, "0", STR_PAD_LEFT);?></td>
-						<td><?PHP echo floor($totalplanned/60).":".str_pad($totalplanned%60, 2, "0", STR_PAD_LEFT);?></td>
-						<?PHP $diff = $totaltime-$totalplanned;?>
-						<td id="totaldiff"><?PHP echo (($diff != 0)?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"");?> </td>
-						<td id="avgspeed">
-						<?PHP 
-							if($totaltime != 0){
-								$totaldistance = mysql_fetch_assoc(mysql_query("SELECT max(distance) as max FROM realcps WHERE visited = 1"));
-								echo round(($totaldistance[max]/$totaltime)*3.6, 2)." km/h";
+				<div>
+					<div style="float:left;margin-top:5px;">
+						<table border="1" width="500px">
+							<tr><th>Lap #</th><th>Actual Time</th><th>Planned time</th><th>Diff</th><th>Avg speed</th></tr>
+							<?PHP $times = mysql_query("SELECT * FROM laps");
+								$totalplanned = 0;
+								$totaltime = 0;
+							while($lap = mysql_fetch_assoc($times)){
+								$totalplanned += $lap[planned_time];
+								$totaltime += $lap[time];
+								echo "<tr>";
+								echo "<td>".$lap[id]."</td>";
+								echo "<td id=\"lap".$lap[id]."\">".(($lap[time] != "")?floor($lap[time]/60).":".str_pad($lap[time]%60, 2, "0", STR_PAD_LEFT):"")."</td>";
+								echo "<td>".floor($lap[planned_time]/60).":".str_pad($lap[planned_time]%60, 2, "0", STR_PAD_LEFT)."</td>";
+								$diff = $lap[time]-$lap[planned_time];
+								echo "<td id=\"lapdiff".$lap[id]."\">".(($lap[time] != "")?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"")."</td>";
+								echo "<td id=\"avglap".$lap[id]."\">".(($lap[time] != 0)?round((3173/$lap[time])*3.6, 2)." km/h":"")."</td>";
+								echo "</tr>";
 							}
-						?>
-						</td>
-					</tr>
-					</table>
+							?>
+							<tr><td>Total</td>
+								<td id="totaltime"><?PHP echo floor($totaltime/60).":".str_pad($totaltime%60, 2, "0", STR_PAD_LEFT);?></td>
+								<td><?PHP echo floor($totalplanned/60).":".str_pad($totalplanned%60, 2, "0", STR_PAD_LEFT);?></td>
+								<?PHP $diff = $totaltime-$totalplanned;?>
+								<td id="totaldiff"><?PHP echo (($diff != 0)?(($diff < 0)?"-":"+").floor(abs($diff)/60).":".str_pad(abs($diff)%60, 2, "0", STR_PAD_LEFT):"");?> </td>
+								<td id="avgspeed">
+								<?PHP 
+									if($totaltime != 0){
+										$totaldistance = mysql_fetch_assoc(mysql_query("SELECT max(distance) as max FROM realcps WHERE visited = 1"));
+										echo round(($totaldistance[max]/$totaltime)*3.6, 2)." km/h";
+									}
+								?>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div style="float:left;margin-top:5px;margin-left:40px;">
+						<div style="text-align:center;">Speed:</div>
+						<div id="speed" style="width:150px;height:150px;"></div>
+					</div>
 				</div>
 				<div style="float:right;">			
 					<div id="map_canvas" style="width: 500px; height: 400px"></div>
@@ -171,6 +177,8 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			var pos;
 			var visibleChart = 0;
 			var visibleCount = 0;
+			var speedg = bindows.loadGaugeIntoDiv("gauge.xml", "speed");
+
 			<?PHP 
 			if ($_SESSION[config][time] != "0000-00-00 00:00:00"){
 				$time = strtotime("now")-strtotime($_SESSION[config][time]);
@@ -196,6 +204,9 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				$.getScript('<?PHP echo $_SESSION[config][adress_for_data];?>', function(){updateUI();});
 			}
 			function updateUI(){
+				speedg.needle.setValue(speed);
+				speedg.label.setText(speed);
+
 				setCarPos(pos[index][0], pos[index][1]);
 				setTimeout(updateValues, 2000);
 			}

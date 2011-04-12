@@ -52,6 +52,7 @@ while 1:
 			h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
 			h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
 			response = h1.getresponse()
+			print(response)
 			if response.status != 200:
 				print("http error")
 				break
