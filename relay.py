@@ -23,8 +23,13 @@ while 1:
 	car_soc, addr = c_srv_soc.accept()
 	while 1:
 		data = ""
+		temp = ""
 		while not re.search("\n", data):
-			data += car_soc.recv(1024)
+			temp = car_soc.recv(1024)
+			data += temp
+			if not temp:
+				data = ""
+				break
 		if not data:
 			print("no data")
 			car_soc.close()
