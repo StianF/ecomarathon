@@ -20,50 +20,61 @@ for res in socket.getaddrinfo(C_ADDR, C_PORT, socket.AF_UNSPEC, socket.SOCK_STRE
 	break
 data = ""
 while 1:
-	car_soc, addr = c_srv_soc.accept()
+	try:
+		car_soc, addr = c_srv_soc.accept()
+	except KeyboardInterrupt:
+		c_srv_soc.close()
+		break
+	except:
+		c_srv_soc.close()
+		continue
 	car_soc.settimeout(20.0);
-	while 1:
-		data = ""
-		temp = ""
-		while not re.search("\n", data):
-			temp = car_soc.recv(1024)
-			data += temp
-			if not temp:
-				data = ""
-				break
-		if not data:
-			print("no data")
-			car_soc.close()
-			break
-		else:
-			print(data)
-			print("got some\n")
-			pattern = "G,\d*,\d*,\d*,\d*,\d*,\d*,\d*,\d*"
-			pos = re.search(pattern, data)
-			if pos:
-				pos = pos.group(0).split(",",9)
-				lat  = int(pos[1]) * 1.0
-				lat += int(pos[2]) / 60.0
-				lat += int(pos[3]) / 6000.0
-				lat += int(pos[4]) / 600000.0
-
-				lon  = int(pos[5]) * 1.0
-				lon += int(pos[6]) / 60.0
-				lon += int(pos[7]) / 6000.0
-				lon += int(pos[8]) / 600000.0
-
-				data = re.sub(pattern, "G," + str(lat) + "," + str(lon), data)
-			
-			print(data)
-			h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
-			h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
-			response = h1.getresponse()
-			print(response)
-			if response.status != 200:
-				print("http error")
-				break
-			data = response.read()
+	try:
+		while 1:
 			data = ""
-			h1.close
-	car_soc.close()
+			temp = ""
+			while not re.search("\n", data):
+				temp = car_soc.recv(1024)
+				data += temp
+				if not temp:
+					data = ""
+					break
+			if not data:
+				print("no data")
+				car_soc.close()
+				break
+			else:
+				print(data)
+				print("got some\n")
+				pattern = "G,\d*,\d*,\d*,\d*,\d*,\d*,\d*,\d*"
+				pos = re.search(pattern, data)
+				if pos:
+					pos = pos.group(0).split(",",9)
+					lat  = int(pos[1]) * 1.0
+					lat += int(pos[2]) / 60.0
+					lat += int(pos[3]) / 6000.0
+					lat += int(pos[4]) / 600000.0
+
+					lon  = int(pos[5]) * 1.0
+					lon += int(pos[6]) / 60.0
+					lon += int(pos[7]) / 6000.0
+					lon += int(pos[8]) / 600000.0
+
+					data = re.sub(pattern, "G," + str(lat) + "," + str(lon), data)
+				
+				print(data)
+				h1 = httplib.HTTPConnection(S_ADDR, S_PORT)
+				h1.request("POST", PATH, urllib.urlencode({"data": data}), {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"})
+				response = h1.getresponse()
+				print(response)
+				if response.status != 200:
+					print("http error")
+					break
+				data = response.read()
+				data = ""
+				h1.close
+		car_soc.close()
+	except:
+		car_soc.close()
+		continue
 c_srv_soc.close()

@@ -6,8 +6,8 @@ import random
 import time
 
 S_PORT = 45987		#Port used to connect to the relayserver
-#S_ADDR = "81.167.78.33"	#Server address
-S_ADDR = "localhost"	#Server address
+S_ADDR = "81.167.78.33"	#Server address
+#S_ADDR = "localhost"	#Server address
 
 s = None
 for res in socket.getaddrinfo(S_ADDR, S_PORT, socket.AF_UNSPEC, socket.SOCK_STREAM, 0):
@@ -54,12 +54,14 @@ while(1):
 				data += "err,"
 			else:
 				data += "%.2f" % (r) + ","
+		#while 1:
+		#	time.sleep(20)
 
 		data += "O,"
 		for i in range(5):
 			data += "%.2f" % ((random.random()%24)) + ","
 
-		data += "G,0,0,0,0,0,0,0,0,0,\n"
+		data += "G,0,0,0,0,0,0,0,0,20.0,\n"
 
 		print(data)
 		s.send(data)
