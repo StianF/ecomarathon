@@ -21,6 +21,7 @@ for res in socket.getaddrinfo(C_ADDR, C_PORT, socket.AF_UNSPEC, socket.SOCK_STRE
 data = ""
 while 1:
 	car_soc, addr = c_srv_soc.accept()
+	car_soc.settimeout(20.0);
 	while 1:
 		data = ""
 		temp = ""
