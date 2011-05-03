@@ -393,13 +393,13 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 			}
 			function stopwatchButton(value){
 				if(value == 'Start'){
-					$.ajax({url: "http://81.167.78.33/eco/config.php?action=start_clock"});
+					$.ajax({url: "http://81.167.78.33/ecomarathon/config.php?action=start_clock"});
 					stopwatch(value);
 				}else if(value == 'Stop '){
-					$.ajax({url: "http://81.167.78.33/eco/config.php?action=stop_clock"});
+					$.ajax({url: "http://81.167.78.33/ecomarathon/config.php?action=stop_clock"});
 					stopwatch(value);		
 				}else if(value == 'Reset'){
-					$.ajax({url: "http://81.167.78.33/eco/config.php?action=reset_clock"});
+					$.ajax({url: "http://81.167.78.33/ecomarathon/config.php?action=reset_clock"});
 					for(i = 1; i <= 6; i++){
 						$("#lap"+i).text('');
 						$("#lapdiff"+i).text('');
