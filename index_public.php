@@ -1,6 +1,7 @@
-<?PHP 
-include 'db.php';
-$_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
+<?php
+	include 'db.php';
+	$_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -13,17 +14,13 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		  
 		<!--<link rel="stylesheet" type="text/css" href="jquery.jqplot.css" /> -->
 		<link rel="stylesheet" type="text/css" href="style.css" />	
-		<link rel="stylesheet" type="text/css" href="popup.css" />	
-
-		<script type="text/javascript" src="common.js"></script> 
-		<script type="text/javascript" src="popup.js"></script>
 
 		<!-- BEGIN: load jquery --> 
 			<script type="text/javascript" src="jquery-1.4.2.min.js"></script> 
 		<!-- END: load jquery --> 
-
+			<script type="text/javascript" src="clock.js"></script>
 		<!-- BEGIN: prefetch values-->
-			<script type="text/javascript" src="<?PHP echo $_SESSION[config][adress_for_data];?>"></script> 
+			<script type="text/javascript" src="getPublicData.php"></script> 
 		<!-- END: prefetch values -->	
 		<!--Gauges (Fucker opp jqBarGraph)-->
 		<script type="text/javascript" src="bindows_gauges.js"></script>
@@ -110,6 +107,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 		<div style="width:1250px;center;  margin-left: auto ;margin-right: auto ;">
 			<center>
 			<div id="header"></div>
+			<div id="clock">00 : 00 : 00</div>
 		<!--	<table><tr><td><img src="DNV.jpg" height="100px"></td><td><h1>Shell Eco Marathon 2011</h1></td><td><img src="shell.jpg" height="100px"></td></tr></table>-->
 			</center>
 			<hr>
@@ -186,7 +184,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				echo "var min = ".(floor($time/60)%60).";";
 				echo "var hour = ".floor($time/3600).";";
 				if($_SESSION[config][time_status] == 1){
-			#		echo "stopwatch(\"Start\");";
+					echo "stopwatch();";
 				}
 			}else{	
 			?>
@@ -201,7 +199,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				updateValues();
 			});
 			function updateValues() {
-				$.getScript('<?PHP echo $_SESSION[config][adress_for_data];?>', function(){updateUI();});
+				$.getScript('getPublicData.php', function(){updateUI();});
 			}
 			function updateUI(){
 				speedg.needle.setValue(speed);
