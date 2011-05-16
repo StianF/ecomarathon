@@ -16,7 +16,7 @@ while($type = mysql_fetch_assoc($types)){
 		$out .= "cell_voltage = [";
 		break;
 	case 1:
-		$out .= "pressure_sensor = [";
+		$out .= "sumcell = [";
 		break;
 	case 2:
 		$out .= "temperature = [";

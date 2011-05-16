@@ -13,11 +13,13 @@
 	}
 	if(!$_SESSION[logged_in]){
 	?>
-		<i>The password is at the moment "ecomarathon"</i>
+	<div style="width:100%; height:100%; text-align: center; vertical-align: middle; line-height: 100%">
+		
 		<form	method="POST">
 			<input type="password" name="pass">
 			<input type="submit" value="Log in">
 		</form>
+	</div>
 	<?PHP
 		exit;
 	}

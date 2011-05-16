@@ -18,7 +18,7 @@ if (sec<=9) { sec = "0" + sec; }
   if (document.clock.theButton.value == "Start") {
    window.clearTimeout(SD);
    return true; }
-SD=window.setTimeout("stopwatch();", 933);
+SD=window.setTimeout("stopwatch();", 1000);
 }
 
 function resetIt() {

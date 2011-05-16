@@ -83,7 +83,7 @@ $laps = mysql_query("SELECT * FROM laps");
 			<div style="float:left">
 			<h3>&nbsp;</h3>
 			<table>
-				<tr><th colspan="2">Pressure sensor:</th></tr>
+				<tr><th colspan="2">Sum Cell Voltage:</th></tr>
 				<tr><td>#</td><td>Text</td><td>Min</td><td>Max</td></tr>
 				<?PHP
 				$names = mysql_query("SELECT * FROM type_sensor WHERE type_id = 1");

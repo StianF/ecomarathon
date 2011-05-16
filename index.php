@@ -149,6 +149,19 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					</tr>
 				</table>
 			</div>
+			<input type="button" onClick="showhide('sumcellvolt');" id="sumcellvoltbut" value="Sum of Cell Voltages">
+			<div style="display:none;" id="sumcellvolt">
+				<table>
+					<tr>
+				<?PHP
+					$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 1 AND n = 0"));
+					echo "<td>".$name[name]."</td>";
+					echo "</tr><tr>";
+					echo "<td><a class='submodal-800-520' href=\"stat.php?type=1&n=0\" style=\"text-decoration:  none;cursor: pointer\" id=\"sumcell\"></a></td>";
+				?>
+					</tr>
+				</table>
+			</div>
 			<input type="button" onClick="showhide('temperature');" id="temperaturebut" value="Temperature">
 			<div style="display:none;" id="temperature">
 				<table>
@@ -191,12 +204,12 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				<table>
 					<tr>
 				<?PHP
-					for($i = 0; $i < 3; $i++){
+					for($i = 0; $i < 2; $i++){
 						$name = mysql_fetch_assoc(mysql_query("SELECT name FROM type_sensor WHERE type_id = 3 AND n = ".$i));
 						echo "<td>".$name[name]."</td>";
 					}
 					echo "</tr><tr>";
-					for($i = 0; $i < 3; $i++){
+					for($i = 0; $i < 2; $i++){
 					//	echo "<td onclick=\"window.open('http://81.167.78.33/eco/stat.php?type=3&n=".$i."');\" style=\"cursor: pointer\" id=\"pressures".$i."\"></td>";
 						echo "<td><a class='submodal-800-520' href=\"stat.php?type=3&n=".$i."\" style=\"text-decoration:  none;cursor: pointer\" id=\"pressures".$i."\"></a></td>";
 					}
@@ -371,7 +384,7 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 					$("#outputvbut").css("background-color", "red");
 				}
 				found = false;
-				for(i = 0; i < 3; i++){
+				for(i = 0; i < 2; i++){
 					$("#pressures"+i).text(pressure[i]+" Pa");
 					if(pressure[i] < threshold[3][i][0] || pressure[i] > threshold[3][i][1] || pressure[i] == "err"){
 						$("#pressures"+i).css("color", "red");
@@ -384,6 +397,19 @@ $_SESSION[config] = mysql_fetch_assoc(mysql_query('SELECT * FROM config'));
 				}
 				if(found){
 					$("#pressurebut").css("background-color", "red");
+				}
+				found = false;
+				$("#sumcell").text(sumcell[0]+" V");
+				if(sumcell[0] < threshold[1][0][0] || sumcell[0] > threshold[1][0][1]){
+					$("#sumcell").css("color", "red");
+					found = true;
+				}else if($("#sumcell").css("color") == "red" || $("#sumcell").css("color") == "rgb(255, 128, 64)"){
+					$("#sumcell").css("color", "#FF8040");
+				}else{
+					$("#sumcell").css("color", "green");
+				}
+				if(found){
+					$("#sumcellvoltbut").css("background-color", "red");
 				}
 				setCarPos(pos[index][0], pos[index][1]);
 				speedg.needle.setValue(speed);
